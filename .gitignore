@@ -1,1 +1,42 @@
+# macOS metadata files
 .DS_Store
+__MACOSX/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Byte-compiled files
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+*.env
+
+# Poetry environment files
+poetry.lock
+
+# Temporary files created during testing or running the application
+temp_*.pdf
+
+# Logs
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Unit test coverage and reports
+htmlcov/
+.coverage
+
+# Egg files
+*.egg-info/
+.eggs/
+
+# Backup files and swap files
+*.bak
+*.swp
+*~
+

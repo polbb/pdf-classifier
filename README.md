@@ -1,8 +1,9 @@
-# Python Coding Challenge
+
+# PDF Classification API
 
 ## Introduction
 
-Welcome to the PDF Classifier Coding Challenge! In this take-home assignment, you'll build a RESTful API service that classifies PDF files into two categories: **"document"** or **"powerpoint"**. Your classification logic should be encapsulated within the `pdf_classifier` module, while the API will handle file uploads and return classification results.
+This document outlines the development and deployment of a RESTful API service for classifying PDF files into two categories: **"document"** or **"powerpoint"**. The classification logic is encapsulated within the `pdf_classifier` module, while the API handles file uploads and returns classification results.
 
 ---
 
@@ -10,71 +11,103 @@ Welcome to the PDF Classifier Coding Challenge! In this take-home assignment, yo
 
 ### Clone the Repository
 
-Begin by cloning this repository. Click the **"Use this template"** button at the top right to create a new **private** repository:
+Begin by cloning this repository. Click the **"Use this template"** button at the top right to create a new private repository.
 
-![Clone Repository](image.png)
+### Prerequisites
 
-Once your repository is set up, navigate to the settings and invite `tomwhale` and `MAlGIaT` as collaborators. This will allow us to review your solution within the private repository:
-
-![Invite Collaborators](image-1.png)
-
----
-
-## Prerequisites
-
-Make sure you have the following installed:
-
-- **Python 3.x** (using Pyenv for version management is recommended)
-- **Poetry** for dependency management
+Ensure you have the following installed:
+- Python 3.x (using Pyenv for version management is recommended)
+- Poetry for dependency management
 
 ---
 
-## Assignment Instructions
+## Running Instructions
 
-### 1. Project Overview
+### Step 1: Install Dependencies
 
-- **Objective**: Develop a **RESTful API service** that classifies PDF files as either **"document"** or **"powerpoint"**.
-- **Functional Programming**: Emphasise a functional programming approach with a focus on **immutability**.
-- **Module Structure**: Place the classification logic within the `pdf_classifier` module.
-- **API Endpoints**:
-  - **Upload Endpoint**: Allow users to upload a PDF and receive its classification.
-  - **Retrieve Endpoint**: Fetch classification results for previously uploaded PDFs.
+Navigate to the project directory and run the following command to install dependencies:
 
-### 2. API Requirements
+```bash
+poetry install
+```
 
-- Use any Python web framework, such as **FastAPI**, **Flask**, or **Django**.
-- Ensure your API endpoints adhere to RESTful principles.
-- Implement comprehensive error handling and validate all inputs.
-- Incorporate logging for significant events and errors.
+### Step 2: Run the Server
 
-### 3. Code Quality
+Activate the virtual environment and run the FastAPI server using one of the following methods:
 
-- Follow **PEP 8** style guidelines.
-- Use type hints.
-- (Optional) Develop both unit and integration tests to ensure your code functions correctly.
+#### Option 1: Run with Hot Reload (Recommended for Development)
 
-### 4. Deliverables
+To enable automatic reloading of the server when changes are made to the code, use the following command:
 
-Ensure your submission includes the following:
+```bash
+poetry shell
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-- **Codebase**: Well-structured and organised.
-- (Optional) **Tests**: Unit and integration tests that demonstrate your code works as intended.
-- **Documentation**:
-  - Explanation of your design decisions.
-  - Instructions on how to run the application.
-  - API usage guide.
-- **README**: A concise summary of your approach.
+This will allow you to see code changes immediately without manually restarting the server.
 
-### 5. Evaluation Criteria
+The server should now be running at `http://127.0.0.1:8000`.
 
-Your submission will be evaluated based on:
+#### Option 2: Run Without Hot Reload (Recommended for Production)
 
-- **Code Quality**: Cleanliness, readability, and adherence to best practices.
-- **API Design**: Compliance with RESTful principles and logical structuring.
-- **Error Handling**: Robustness and clarity of error messages.
-- (Optional) **Testing**: Coverage and effectiveness of your unit and integration tests.
-- **Documentation**: Clarity and completeness of your instructions and API usage guides.
+If you do not need the hot reload feature, you can run the server directly:
+
+```bash
+poetry shell
+python api/main.py
+```
+
+This will start the server without automatic reloading, which is more suitable for production environments.
+
+The server should now be running at `http://127.0.0.1:8000`.
+### Step 3: API Endpoints
+
+- **Upload PDF for Classification**: `POST /classify/`
+  - Endpoint to upload a PDF and classify it.
+  - Example Request:
+    ```bash
+    curl -X POST "http://127.0.0.1:8000/classify/" -F "file=@example.pdf"
+    ```
+  - Example Response:
+    ```json
+    {
+      "filename": "example.pdf",
+      "classification": "document"
+    }
+    ```
+
+- **Retrieve Classification Results**: `GET /results/`
+  - Endpoint to retrieve the classification results of previously uploaded PDFs.
+  - Example Request:
+    ```bash
+    curl -X GET "http://127.0.0.1:8000/results/"
+    ```
+  - Example Response:
+    ```json
+    [
+      {
+        "filename": "example.pdf",
+        "classification": "document",
+        "timestamp": "2024-10-18T12:34:56.789Z"
+      }
+    ]
+    ```
 
 ---
 
-Happy coding!
+## Design Decisions
+
+- **Framework**: The FastAPI framework was chosen due to its fast performance, ease of use, and built-in support for modern Python features (such as type hints and async functionality).
+- **Classification Model**: A logistic regression model was used for simplicity. The goal was to balance interpretability and efficiency, given the requirements of the classification task.
+- **In-Memory Storage**: For simplicity, classification results are stored in memory. For a production-ready version, a persistent database (e.g., SQLite or PostgreSQL) would be preferable.
+
+---
+
+
+## Future Improvements
+
+- Add pagination to the `/results/` endpoint for scalability.
+- Replace in-memory storage with a persistent database to handle more extensive datasets.
+- Improve error handling for edge cases, such as corrupted or very large PDF files.
+
+---
