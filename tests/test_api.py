@@ -6,7 +6,7 @@ client = TestClient(app)
 
 
 def test_upload_valid_pdf():
-    '''Test uploading a valid PDF file'''
+    """Test uploading a valid PDF file."""
     with open('tests/test_pdfs/doc_sample_valid.pdf', 'rb') as pdf_file:
         response = client.post('/classify/', files={'file': pdf_file})
     assert response.status_code == 200
@@ -15,7 +15,7 @@ def test_upload_valid_pdf():
 
 
 def test_upload_valid_ppt():
-    '''Test uploading a valid PPT file'''
+    """Test uploading a valid PPT file."""
     with open('tests/test_pdfs/ppt_sample_valid.pdf', 'rb') as ppt_file:
         response = client.post('/classify/', files={'file': ppt_file})
     assert response.status_code == 200
@@ -24,26 +24,29 @@ def test_upload_valid_ppt():
 
 
 def test_upload_non_pdf_file():
-    '''Test uploading a non-PDF file (should fail)'''
+    """Test uploading a non-PDF file (should fail)."""
     response = client.post(
         '/classify/',
         files={
             'file': (
                 'invalid.txt',
-                b'invalid content')})
+                b'invalid content')
+        }
+    )
     assert response.status_code == 422
 
 
 def test_upload_corrupted_pdf():
-    '''Test uploading a corrupted PDF file'''
+    """Test uploading a corrupted PDF file."""
     with open('tests/test_pdfs/corrupted.pdf', 'rb') as corrupted_pdf:
         response = client.post('/classify/', files={'file': corrupted_pdf})
-    assert response.status_code == 500  # Assuming a 500 error if the PDF is corrupted
+    # Assuming a 500 error if the PDF is corrupted
+    assert response.status_code == 500
     assert 'detail' in response.json()
 
 
 def test_retrieve_results_after_upload():
-    '''Test retrieving classification results after PDFs have been uploaded and classified'''
+    """Test retrieving classification results after PDFs have been uploaded and classified."""
     with open('tests/test_pdfs/doc_sample_valid.pdf', 'rb') as pdf_file:
         client.post('/classify/', files={'file': pdf_file})
 

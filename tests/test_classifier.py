@@ -43,8 +43,7 @@ def test_classify_pdf_powerpoint(mock_load_model, mock_extract_features):
     mock_model.predict.return_value = ['powerpoint']
     mock_load_model.return_value = mock_model  # Mock loading of the model
 
-    # Mock feature extraction to return a valid pandas DataFrame with correct
-    # feature names
+    # Mock feature extraction to return a valid pandas DataFrame with correct feature names
     mock_extract_features.return_value = pd.DataFrame([{
         'average_width': 1024,
         'average_height': 768,
