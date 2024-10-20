@@ -87,9 +87,14 @@ The server should now be running at `http://127.0.0.1:8000`.
     ```json
     [
       {
-        "filename": "example.pdf",
+        "filename": "example_1.pdf",
         "classification": "document",
         "timestamp": "2024-10-18T12:34:56.789Z"
+      },
+      {
+        "filename": "example_2.pdf",
+        "classification": "document",
+        "timestamp": "2024-10-18T12:30:00.789Z"
       }
     ]
     ```
