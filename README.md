@@ -93,7 +93,7 @@ The server should now be running at `http://127.0.0.1:8000`.
       },
       {
         "filename": "example_2.pdf",
-        "classification": "document",
+        "classification": "powerpoint",
         "timestamp": "2024-10-18T12:30:00.789Z"
       }
     ]
