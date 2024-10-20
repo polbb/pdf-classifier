@@ -24,41 +24,40 @@ class ClassificationResult(BaseModel):
     timestamp: str
 
 
-@app.post("/classify/", response_model=ClassificationResult, summary="Upload and classify a PDF",
-          description="Endpoint to upload and classify a PDF file. The file must be in PDF format.")
+@app.post(
+    "/classify/",
+    response_model=ClassificationResult,
+    summary="Upload and classify a PDF",
+    description="Endpoint to upload and classify a PDF file. The file must be in PDF format."
+)
 async def upload_pdf(file: UploadFile = File(...)) -> Dict[str, str]:
     """Endpoint to upload and classify a PDF."""
     validate_pdf(file)
     temp_file_path = save_temp_file(file)
     try:
-        result = classify_and_log(
-            temp_file_path,
-            file.filename,
-            classification_results)
+        result = classify_and_log(temp_file_path, file.filename, classification_results)
     except Exception as e:
-        logging.error(
-            f"Error occurred while processing file '{
-                file.filename}': {
-                str(e)}")
+        logging.error(f"Error occurred while processing file '{file.filename}': {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail="An internal error occurred while processing the file.",
+            detail="An internal error occurred while processing the file."
         )
     finally:
         clean_up_temp_file(temp_file_path)
     return result
 
 
-@app.get("/results/",
-         response_model=List[ClassificationResult],
-         summary="Retrieve classification results",
-         description="Endpoint to retrieve the classification results of previously uploaded PDFs.")
+@app.get(
+    "/results/",
+    response_model=List[ClassificationResult],
+    summary="Retrieve classification results",
+    description="Endpoint to retrieve the classification results of previously uploaded PDFs."
+)
 async def retrieve_results() -> List[Dict[str, str]]:
     """Endpoint to retrieve classification results."""
-    logging.info(
-        f"Retrieving classification results, total: {
-            len(classification_results)}")
+    logging.info(f"Retrieving classification results, total: {len(classification_results)}")
     return classification_results
+
 
 if __name__ == "__main__":
     import uvicorn

@@ -23,7 +23,6 @@ def classify_pdf(file_path: str) -> str:
     try:
         # Extract features from the PDF
         features_df = extract_pdf_features(file_path)
-        logging.info(f"Features extracted from {file_path}")
 
         # Check if features extraction was successful
         if features_df is None:

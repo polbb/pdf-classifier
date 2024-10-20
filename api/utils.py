@@ -1,8 +1,8 @@
 import os
-from fastapi import UploadFile, HTTPException
 import logging
 from typing import Dict, List
 from datetime import datetime, timezone
+from fastapi import UploadFile, HTTPException
 from pdf_classifier.classifier import classify_pdf
 
 
@@ -12,7 +12,8 @@ def validate_pdf(file: UploadFile) -> None:
         logging.error(f"Invalid file format attempted: {file.filename}")
         raise HTTPException(
             status_code=422,
-            detail="Invalid file format. Only PDF files are allowed.")
+            detail="Invalid file format. Only PDF files are allowed."
+        )
 
 
 def save_temp_file(file: UploadFile) -> str:
@@ -30,11 +31,11 @@ def clean_up_temp_file(file_path: str) -> None:
         logging.info(f"Temporary file '{file_path}' deleted.")
 
 
-def classify_and_log(file_path: str,
-                     filename: str,
-                     classification_results: List[Dict[str,
-                                                       str]]) -> Dict[str,
-                                                                      str]:
+def classify_and_log(
+    file_path: str,
+    filename: str,
+    classification_results: List[Dict[str, str]]
+) -> Dict[str, str]:
     """Classify the PDF and log the result."""
     classification = classify_pdf(file_path)
     result = {
@@ -44,6 +45,5 @@ def classify_and_log(file_path: str,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     classification_results.append(result)
-    logging.info(
-        f"File '{filename}' classified successfully as '{classification}'")
+    logging.info(f"File '{filename}' classified successfully as '{classification}'")
     return result
