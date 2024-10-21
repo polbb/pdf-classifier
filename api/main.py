@@ -17,7 +17,8 @@ logging.basicConfig(
     handlers=[logging.FileHandler("app.log"), logging.StreamHandler()],
 )
 
-
+ 
+# Define the Pydantic model for classification results
 class ClassificationResult(BaseModel):
     filename: str
     classification: str
@@ -63,4 +64,3 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
-    

@@ -135,11 +135,29 @@ The project contains the following key components:
 
 ---
 
-
 ## Future Improvements
 
-- Add pagination to the `/results/` endpoint for scalability.
-- Replace in-memory storage with a persistent database to handle more extensive datasets.
-- Improve error handling for edge cases.
+1. **Optimize OCR Performance**:
+   - Implement caching for OCR results to avoid redundant processing.
+   - Reduce image resolution if high accuracy is not needed for faster processing.
+   - Use parallel processing to perform OCR on multiple pages simultaneously.
+
+2. **Enhance the Model**:
+   - Train with a more diverse dataset to improve generalizability.
+   - Automate model retraining to adapt as more data is collected.
+
+3. **Scalability**:
+   - Use a persistent database instead of in-memory storage.
+   - Containerize the application with Docker for easier deployment.
+   - Deploy on cloud platforms with autoscaling capabilities to handle high traffic.
+
+4. **User Experience**:
+   - Add pagination to `/results/` for better handling of large result sets.
+   - Implement user authentication to secure access.
+
+5. **Testing and CI/CD**:
+   - Increase test coverage for more edge cases.
+
+
 
 ---

@@ -27,7 +27,7 @@ def classify_pdf(file_path: str) -> str:
         # Check if features extraction was successful
         if features_df is None:
             raise ValueError(f"Failed to extract features from {file_path}")
-
+        
         # Make a prediction using the loaded model
         prediction = model.predict(features_df)[0]
         logging.info(f"Prediction for file '{file_path}': {prediction}")

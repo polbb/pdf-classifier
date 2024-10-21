@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 
-def read_pdf_metadata(file_path: str, num_pages_to_check: int = 10) -> Dict[str, int]:
+def read_pdf_metadata(file_path: str, num_pages_to_check: int) -> Dict[str, int]:
     """
     Read metadata from a PDF file for the first few pages.
 
@@ -33,11 +33,10 @@ def read_pdf_metadata(file_path: str, num_pages_to_check: int = 10) -> Dict[str,
             # Extract metadata from the first 'num_pages_to_check' pages or fewer if total pages are less
             pages_to_check = min(num_pages_to_check, total_pages)
             logging.info(f"Checking {pages_to_check} pages")
-            pages_info = [extract_page_info(reader.pages[i]) for i in range(pages_to_check)]
+            pages_info = [_extract_page_info(reader.pages[i]) for i in range(pages_to_check)]
 
             # Extract rotation information for all pages
             all_pages_rotated = all((page.get('/Rotate') or 0) != 0 for page in reader.pages)
-
             logging.info(f"All pages rotated: {all_pages_rotated}")
 
             # Calculate features from pages info
@@ -58,7 +57,7 @@ def read_pdf_metadata(file_path: str, num_pages_to_check: int = 10) -> Dict[str,
         raise
 
 
-def extract_page_info(page) -> Dict[str, int]:
+def _extract_page_info(page) -> Dict[str, int]:
     """
     Extract page dimensions and rotation information.
 
@@ -86,13 +85,13 @@ def extract_page_info(page) -> Dict[str, int]:
         raise
 
 
-def extract_text_features(file_path: str, num_pages: int) -> Dict[str, int]:
+def extract_text_features(file_path: str, num_pages_to_check: int) -> Dict[str, int]:
     """
     Extract text features from the first few pages of the PDF using OCR.
 
     Parameters:
     - file_path (str): Path to the PDF file.
-    - num_pages (int): Number of pages in the PDF to consider for OCR.
+    - num_pages_to_check (int): Number of pages in the PDF to consider for OCR.
 
     Returns:
     - Dict[str, int]: A dictionary containing text-related features.
@@ -101,7 +100,7 @@ def extract_text_features(file_path: str, num_pages: int) -> Dict[str, int]:
         images = convert_from_path(
             file_path,
             first_page=1,
-            last_page=min(10, num_pages)
+            last_page=min(num_pages_to_check, num_pages_to_check)
         )
 
         total_words = sum(len(pytesseract.image_to_string(image).split()) for image in images)
@@ -117,23 +116,24 @@ def extract_text_features(file_path: str, num_pages: int) -> Dict[str, int]:
         raise
 
 
-def extract_pdf_features(file_path: str) -> Optional[pd.DataFrame]:
+def extract_pdf_features(file_path: str, num_pages_to_check: int = 10) -> Optional[pd.DataFrame]:
     """
     Extract features from a PDF file for classification.
 
     Parameters:
     - file_path (str): Path to the PDF file.
+    - num_pages_to_check (int, optional): Number of pages to consider for feature extraction (default: 10).
 
     Returns:
     - pd.DataFrame or None: A DataFrame containing extracted features,
     or None if an error occurs.
     """
     try:
-        # Extract metadata features for the first 10 pages or fewer
-        metadata_features = read_pdf_metadata(file_path)
+        # Extract metadata features for the specified number of pages or fewer
+        metadata_features = read_pdf_metadata(file_path, num_pages_to_check)
 
-        # Extract text features for the first 10 pages or fewer
-        text_features = extract_text_features(file_path, metadata_features['num_pages'])
+        # Extract text features for the specified number of pages or fewer
+        text_features = extract_text_features(file_path, min(num_pages_to_check, metadata_features['num_pages']))
 
         # Combine all features
         features = {**metadata_features, **text_features}
