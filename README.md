@@ -15,7 +15,7 @@ Begin by cloning this repository using the following command:
 
 ```bash
 git clone https://github.com/polbb/pdf-classifier.git
-
+```
 
 ### Prerequisites
 
