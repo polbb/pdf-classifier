@@ -11,7 +11,11 @@ This document outlines the development and deployment of a RESTful API service f
 
 ### Clone the Repository
 
-Begin by cloning this repository. Click the **"Use this template"** button at the top right to create a new private repository.
+Begin by cloning this repository using the following command:
+
+```bash
+git clone https://github.com/polbb/pdf-classifier.git
+
 
 ### Prerequisites
 
